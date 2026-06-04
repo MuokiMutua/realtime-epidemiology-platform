@@ -1,0 +1,29 @@
+
+services:
+  # PostgreSQL with Spatial Extensions (PostGIS)
+  postgis:
+    image: postgis/postgis:15-3.3-alpine
+    container_name: outbreak_spatial_db
+    environment:
+      POSTGRES_USER: health_admin
+      POSTGRES_PASSWORD: HealthPassword2026
+      POSTGRES_DB: epidemiological_data
+    ports:
+      - "5435:5432" # Port 5435 to avoid clashing with your previous projects
+    volumes:
+      - pg_health_data:/var/lib/postgresql/data
+
+  # Database Visualizer
+  pgadmin:
+    image: dpage/pgadmin4:8.5
+    container_name: outbreak_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@moh.ke
+      PGADMIN_DEFAULT_PASSWORD: AdminPassword2026
+    ports:
+      - "5052:80"
+    depends_on:
+      - postgis
+
+volumes:
+  pg_health_data:
